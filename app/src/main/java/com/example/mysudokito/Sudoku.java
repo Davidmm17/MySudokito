@@ -10,10 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mysudokito.entidades.Usuario;
 
@@ -23,9 +26,11 @@ import java.util.HashMap;
 
 public class Sudoku extends AppCompatActivity {
     private GeneradorSudoku sudoku;
+    private GeneradorSudoku respuestaSudoku;
     private LinearLayout tablero;
     private EditText casilla;
     private HashMap<Integer,EditText> casillasMap;
+    private ComprobadorSudoku comprobadorSolucion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +45,7 @@ public class Sudoku extends AppCompatActivity {
         this.tablero = findViewById(R.id.tableroSudoku);
         this.casillasMap = new HashMap<>();
         this.crearTablero();
-
+        this.comprobadorSolucion = new ComprobadorSudoku(this.sudoku);
 
     }
 
@@ -99,4 +104,36 @@ public class Sudoku extends AppCompatActivity {
             this.tablero.addView(row);
         }
     }
+
+    public void reiniciarTablero(View view){
+        System.out.println("Borrar Tablerito");
+        tablero.removeAllViews();
+        this.crearTablero();
+        this.sudoku.printarTablero();
+    }
+
+    public boolean comprobar(View view){
+        this.respuestaSudoku = new GeneradorSudoku();
+        EditText casilla;
+        for(int x = 0; x <9;x++) {
+            for(int y=0 ; y < 9 ;y++){
+                casilla = this.casillasMap.get(Integer.parseInt(x+""+y));
+                if(TextUtils.isEmpty(casilla.getText())){
+                    Toast.makeText(this,"Hay casillas vacias", Toast.LENGTH_SHORT).show();
+                    return false;
+                } else{
+                    this.respuestaSudoku.getTablero()[x][y].setNumero(Integer.parseInt(casilla.getText().toString()));
+                }
+            }
+        }
+
+        this.comprobadorSolucion.setRespuestaSudoku(respuestaSudoku);
+        if(this.comprobadorSolucion.comprobarRespuestaSudoku()){
+            Toast.makeText(this,"Solución Correcta", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+            Toast.makeText(this,"Solución Incorrecta", Toast.LENGTH_SHORT).show();
+           return false;
+        }
+
 }
