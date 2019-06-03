@@ -150,7 +150,7 @@ public class GeneradorSudoku {
     public void vaciarCasillas(){
         Random r= new Random();
         int k1,k2,max=8,min=0;
-        for(int x=0;x<50;x++){
+        for(int x=0;x<2;x++){
             do{
                 k1=r.nextInt(max-min+1)+min;
                 k2=r.nextInt(max-min+1)+min;

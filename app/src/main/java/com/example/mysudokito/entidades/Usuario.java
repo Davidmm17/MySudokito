@@ -4,12 +4,27 @@ public class Usuario {
 
     private int id;
     private String nombre;
-    private String puntuacion;
+    private int puntuacionSegundos;
+    private int puntuacionMinutos;
+    private String fecha;
 
-    public Usuario(int id, String nombre, String puntuacion) {
+    public Usuario(int id, String nombre, int puntuacionSegundos, int puntuacionMinutos, String fecha) {
         this.id = id;
         this.nombre = nombre;
-        this.puntuacion = puntuacion;
+        this.puntuacionSegundos = puntuacionSegundos;
+        this.puntuacionMinutos = puntuacionMinutos;
+        this.fecha = fecha;
+    }
+
+    public Usuario() {
+    }
+
+    public int getPuntuacionMinutos() {
+        return puntuacionMinutos;
+    }
+
+    public void setPuntuacionMinutos(int puntuacionMinutos) {
+        this.puntuacionMinutos = puntuacionMinutos;
     }
 
     public int getId() {
@@ -28,11 +43,18 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public String getPuntuacion() {
-        return puntuacion;
+    public int getPuntuacionSegundos() {
+        return puntuacionSegundos;
     }
 
-    public void setPuntuacion(String puntuacion) {
-        this.puntuacion = puntuacion;
+    public void setPuntuacionSegundos(int puntuacionSegundos) {
+        this.puntuacionSegundos = puntuacionSegundos;
+    }
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 }
