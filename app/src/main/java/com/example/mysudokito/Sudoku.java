@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
-import android.media.MediaExtractor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -27,8 +26,6 @@ import android.widget.Toast;
 import com.example.mysudokito.entidades.Usuario;
 import com.example.mysudokito.utilidades.Utilidades;
 
-import org.w3c.dom.Text;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,6 +34,7 @@ import java.util.TimerTask;
 
 public class Sudoku extends AppCompatActivity {
     private GeneradorSudoku sudoku;
+    private GeneradorSudoku tableroSudoku;
     private GeneradorSudoku respuestaSudoku;
     private LinearLayout tablero;
     private TextView contadorText;
@@ -58,16 +56,35 @@ public class Sudoku extends AppCompatActivity {
 
         System.out.println("segundo intento" + nombreUsuario);
         this.sudoku = new GeneradorSudoku();
+        comprobadorSolucion = new ComprobadorSudoku(sudoku);
+        //this.sudoku.rellenarTableroRespuesta();
+        /*
+        try{
+            this.tableroSudoku = new GeneradorSudoku(sudoku.clone());
+            //comprobadorSolucion.setSudokuTablero(sudoku.clone());
+        }catch (CloneNotSupportedException ex){
+            ex.printStackTrace();
+        }
+    */
+        sudoku.printarTablero();
+        System.out.println("###########################################################");
+        sudoku.printarTableroRespuesta();
+        //this.comprobadorSolucion.setSudokuTablero(this.sudoku);
         this.contador = new Timer();
         this.contadorText = (TextView) findViewById(R.id.contadorText);
+        //this.sudoku.printarTablero();
         this.sudoku.vaciarCasillas();
-        this.sudoku.printarTablero();
+        System.out.println("////////////////////////////////////////////////////////////////");
+        sudoku.printarTablero();
+        System.out.println("###########################################################");
+        sudoku.printarTableroRespuesta();
+        //comprobadorSolucion.getSudokuTablero().printarTablero();
+        //this.sudoku.printarTablero();
         this.jugador = new Usuario();
         this.tablero = findViewById(R.id.tableroSudoku);
         this.hashMapCasillas = new HashMap<>();
         this.crearTablero();
         this.empezarContadorTiempo();
-        this.comprobadorSolucion = new ComprobadorSudoku(this.sudoku);
 
     }
 
@@ -102,6 +119,27 @@ public class Sudoku extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    /*
+    *
+    *
+    *
+    * public void vaciarCasillas(){
+        Random r= new Random();
+        int k1,k2,max=8,min=0;
+        for(int x=0;x<2;x++){
+            do{
+                k1=r.nextInt(max-min+1)+min;
+                k2=r.nextInt(max-min+1)+min;
+            }while ( this.tablero[k1][k2].getNumero()==0 );
+            this.tablero[k1][k2].setNumero(0);
+        }
+
+    }
+    *
+    *
+    * */
 
     public void crearTablero(){
         int maxLength = 1;
@@ -181,8 +219,14 @@ public class Sudoku extends AppCompatActivity {
             }
         }
 
-        this.comprobadorSolucion.setRespuestaSudoku(respuestaSudoku);
-        if(this.comprobadorSolucion.comprobarRespuestaSudoku()){
+        this.comprobadorSolucion.setRespuestaSudokuTablero(respuestaSudoku);
+
+
+        System.out.println("Printando el sudoku a resolver");
+        comprobadorSolucion.getRespuestaSudokuTablero().printarTablero();
+        System.out.println("Printando solucion del sudoku");
+        comprobadorSolucion.getSudokuTablero().printarTableroRespuesta();
+        if(this.comprobadorSolucion.comprobarRespuestaSudoku(comprobadorSolucion.getSudokuTablero(), comprobadorSolucion.getRespuestaSudokuTablero() )){
             Toast.makeText(this,"Solución Correcta", Toast.LENGTH_SHORT).show();
             jugador.setPuntuacionSegundos(segundos);
             jugador.setPuntuacionMinutos(minutos);
@@ -233,7 +277,7 @@ public class Sudoku extends AppCompatActivity {
     }
 
     public void registrarPuntuacion(){
-        ConexiónSQLiteHelper conn= new ConexiónSQLiteHelper(this,"bd_sudoku",null,5);
+        ConexiónSQLiteHelper conn= new ConexiónSQLiteHelper(this,"bd_sudoku",null,6);
 
         SQLiteDatabase db=conn.getWritableDatabase();
 

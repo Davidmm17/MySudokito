@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        conn= new ConexiónSQLiteHelper(this,"bd_sudoku",null,5);
+        conn= new ConexiónSQLiteHelper(this,"bd_sudoku",null,6);
 /*
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);*/

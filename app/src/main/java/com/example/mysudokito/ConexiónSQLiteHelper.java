@@ -27,6 +27,7 @@ public class ConexiónSQLiteHelper extends SQLiteOpenHelper {
            // db.execSQL("ALTER TABLE puntuaciones ADD COLUMN fecha STRING DEFAULT 0 ");
           //  db.execSQL("ALTER TABLE puntuaciones ADD COLUMN puntuacion_segundos STRING DEFAULT 0 ");
           //  db.execSQL("ALTER TABLE puntuaciones ADD COLUMN puntuacion_minutos STRING DEFAULT 0 ");
+           // db.execSQL("DELETE FROM puntuaciones");
             System.out.println("CAMBIO DE BASE DE DATOS //////////////////////////////////////////////////////////////////////////////////////");
         }
 
